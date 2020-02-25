@@ -1,35 +1,42 @@
-package problem0039
+//package problem0039
+package main
 
-import (
-	"sort"
-)
+import "sort"
+import "fmt"
 
 func combinationSum(candidates []int, target int) [][]int {
 	sort.Ints(candidates)
-
 	res := [][]int{}
-	solution := []int{}
-	cs(candidates, solution, target, &res)
-
+	path := []int{}
+	index := 0
+	dfs(candidates, target, index, path, &res)
 	return res
 }
 
-func cs(candidates, solution []int, target int, result *[][]int) {
-	if target == 0 {
-		*result = append(*result, solution)
-	}
-
-	if len(candidates) == 0 || target < candidates[0] {
-		// target < candidates[0] 因为candidates是排序好的
+func dfs(candidates []int, target int, index int, path []int, res *[][]int) {
+	if target < 0 {
+		return
+	} else if target == 0 {
+		temp := make([]int, len(path))
+		copy(temp, path)
+		*res = append(*res, temp)
 		return
 	}
 
-	// 这样处理一下的用意是，让切片的容量等于长度，以后append的时候，会分配新的底层数组
-	// 避免多处同时对底层数组进行修改，产生错误的答案。
-	// 可以注释掉以下语句，运行单元测试，查看错误发生。
-	solution = solution[:len(solution):len(solution)]
+	for n := index; n < len(candidates); n++ {
+		num := candidates[n]
+		if num > target {
+			break
+		}
+		path = append(path, num)
+		dfs(candidates, target-num, n, path, res)
+		path = path[:len(path)-1]
 
-	cs(candidates, append(solution, candidates[0]), target-candidates[0], result)
+	}
+	return
+}
 
-	cs(candidates[1:], solution, target, result)
+func main() {
+	c := []int{2, 3, 7}
+	fmt.Println(combinationSum(c, 18))
 }

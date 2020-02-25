@@ -1,36 +1,36 @@
 package problem0017
 
-var m = map[byte][]string{
-	'2': []string{"a", "b", "c"},
-	'3': []string{"d", "e", "f"},
-	'4': []string{"g", "h", "i"},
-	'5': []string{"j", "k", "l"},
-	'6': []string{"m", "n", "o"},
-	'7': []string{"p", "q", "r", "s"},
-	'8': []string{"t", "u", "v"},
-	'9': []string{"w", "x", "y", "z"},
+var letterMap = []string{
+	" ",    //0
+	"",     //1
+	"abc",  //2
+	"def",  //3
+	"ghi",  //4
+	"jkl",  //5
+	"mno",  //6
+	"pqrs", //7
+	"tuv",  //8
+	"wxyz", //9
 }
 
 func letterCombinations(digits string) []string {
 	if digits == "" {
 		return nil
 	}
+	res := []string{}
+	findCombination(&res, &digits, 0, "")
+	return res
+}
 
-	ret := []string{""}
-
-	// 让digits中所有的数字都有机会进行迭代。
-	for i := 0; i < len(digits); i++ {
-		temp := []string{}
-		// 让ret中的每个元素都能添加新的字母。
-		for j := 0; j < len(ret); j++ {
-			// 把digits[i]所对应的字母，多次添加到ret[j]的末尾
-			for k := 0; k < len(m[digits[i]]); k++ {
-				temp = append(temp, ret[j]+m[digits[i]][k])
-			}
-		}
-
-		ret = temp
+func findCombination(res *[]string, digits *string, index int, s string) {
+	if index == len(*digits) {
+		*res = append(*res, s)
+		return
 	}
-
-	return ret
+	num := (*digits)[index]
+	letter := letterMap[num-'0']
+	for i := 0; i < len(letter); i++ {
+		findCombination(res, digits, index+1, s+string(letter[i]))
+	}
+	return
 }

@@ -1,31 +1,20 @@
 package problem0022
 
 func generateParenthesis(n int) []string {
-	res := make([]string, 0, n*n)
-	bytes := make([]byte, n*2)
-	dfs(n, n, 0, bytes, &res)
+	res := []string{}
+	backtrack(&res, n, "", 0, 0)
 	return res
 }
 
-func dfs(left, right, idx int, bytes []byte, res *[]string) {
-	// 所有符号都添加完毕
-	if left == 0 && right == 0 {
-		*res = append(*res, string(bytes))
-		return
+func backtrack(res *[]string, n int, S string, left int, right int) {
+	if len(S) == 2*n {
+		*res = append(*res, S)
 	}
-
-	// "(" 不用担心匹配问题，
-	// 只要 left > 0 就可以直接添加
-	if left > 0 {
-		bytes[idx] = '('
-		dfs(left-1, right, idx+1, bytes, res)
+	if left < n {
+		backtrack(res, n, S+"(", left+1, right)
 	}
-
-	// 想要添加 ")" 时
-	// 需要 left < right，
-	// 即在 bytes[:idx] 至少有一个 "(" 可以与 这个 ")" 匹配
-	if right > 0 && left < right {
-		bytes[idx] = ')'
-		dfs(left, right-1, idx+1, bytes, res)
+	if right < left {
+		backtrack(res, n, S+")", left, right+1)
 	}
+	return
 }

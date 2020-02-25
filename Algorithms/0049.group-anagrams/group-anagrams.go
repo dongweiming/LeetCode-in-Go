@@ -1,27 +1,33 @@
 package problem0049
 
-func groupAnagrams(ss []string) [][]string {
-	tmp := make(map[int][]string, len(ss)/2)
-	for _, s := range ss {
-		c := encode(s)
-		tmp[c] = append(tmp[c], s)
-	}
+import "sort"
 
-	res := make([][]string, 0, len(tmp))
-	for _, v := range tmp {
-		res = append(res, v)
-	}
+type sortRunes []rune
 
-	return res
+func (s sortRunes) Less(i, j int) bool {
+	return s[i] < s[j]
 }
 
-// prime 与 A～Z 对应，英文中出现概率越大的字母，选用的质数越小
-var prime = []int{5, 71, 37, 29, 2, 53, 59, 19, 11, 83, 79, 31, 43, 13, 7, 67, 97, 23, 17, 3, 41, 73, 47, 89, 61, 101}
+func (s sortRunes) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
 
-func encode(s string) int {
-	res := 1
-	for i := range s {
-		res *= prime[s[i]-'a']
+func (s sortRunes) Len() int {
+	return len(s)
+}
+
+func groupAnagrams(strs []string) [][]string {
+	mp, res := map[string][]string{}, [][]string{}
+	for _, s := range strs {
+		sByte := []rune(s)
+		sort.Sort(sortRunes(sByte))
+		a := mp[string(sByte)]
+		a = append(a, s)
+		mp[string(sByte)] = a
+	}
+
+	for _, v := range mp {
+		res = append(res, v)
 	}
 	return res
 }

@@ -14,34 +14,26 @@ type ListNode struct {
 	Next *ListNode
 }
 
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
 func removeNthFromEnd(head *ListNode, n int) *ListNode {
-	d, headIsNthFromEnd := getDaddy(head, n)
-
-	if headIsNthFromEnd {
-		// 删除head节点
+	first := head
+	second := head
+	for i := 0; i < n; i++ {
+		first = first.Next
+	}
+	if first == nil {
 		return head.Next
 	}
-
-	d.Next = d.Next.Next
-
-	return head
-}
-
-// 获取倒数第N个节点的父节点
-func getDaddy(head *ListNode, n int) (daddy *ListNode, headIsNthFromEnd bool) {
-	daddy = head
-
-	for head != nil {
-		if n < 0 {
-			daddy = daddy.Next
-		}
-
-		n--
-		head = head.Next
+	for first.Next != nil {
+		first = first.Next
+		second = second.Next
 	}
-
-	// n==0，说明链的长度等于n
-	headIsNthFromEnd = n == 0
-
-	return
+	second.Next = second.Next.Next
+	return head
 }

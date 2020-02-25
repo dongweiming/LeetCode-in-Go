@@ -4,7 +4,6 @@ import (
 	"github.com/aQuaYi/LeetCode-in-Go/kit"
 )
 
-// TreeNode is pre-defined...
 type TreeNode = kit.TreeNode
 
 // NOTICE: 此解法的时间复杂度是 O(n)

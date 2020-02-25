@@ -1,52 +1,44 @@
 package problem0079
 
 func exist(board [][]byte, word string) bool {
-	m := len(board)
-	if m == 0 {
+	if len(board) == 0 {
 		return false
 	}
-
-	n := len(board[0])
-	if n == 0 {
+	if len(board[0]) == 0 {
 		return false
 	}
 
 	if len(word) == 0 {
 		return false
 	}
-
-	var dfs func(int, int, int) bool
-	dfs = func(r, c, index int) bool {
-		if len(word) == index {
-			return true
-		}
-
-		if r < 0 || m <= r || c < 0 || n <= c || board[r][c] != word[index] {
-			return false
-		}
-
-		temp := board[r][c]
-		board[r][c] = 0
-
-		if dfs(r-1, c, index+1) ||
-			dfs(r+1, c, index+1) ||
-			dfs(r, c-1, index+1) ||
-			dfs(r, c+1, index+1) {
-			return true
-		}
-
-		board[r][c] = temp
-
-		return false
-	}
-
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if dfs(i, j, 0) {
+	for i := 0; i < len(board); i++ {
+		for j := 0; j < len(board[0]); j++ {
+			if backtrack(board, word, 0, i, j) {
 				return true
 			}
 		}
 	}
+	return false
+}
 
+func backtrack(board [][]byte, word string, index int, i int, j int) bool {
+	tmp := board[i][j]
+	if tmp != word[index] {
+		return false
+	}
+
+	if len(word)-1 == index {
+		return true
+	}
+
+	board[i][j] = 0
+	index++
+	if (i > 0 && backtrack(board, word, index, i-1, j)) ||
+		(j > 0 && backtrack(board, word, index, i, j-1)) ||
+		(i < len(board)-1 && backtrack(board, word, index, i+1, j)) ||
+		(j < len(board[0])-1 && backtrack(board, word, index, i, j+1)) {
+		return true
+	}
+	board[i][j] = tmp
 	return false
 }

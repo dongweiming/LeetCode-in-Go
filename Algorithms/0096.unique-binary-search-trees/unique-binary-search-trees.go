@@ -1,6 +1,15 @@
 package problem0096
 
 func numTrees(n int) int {
+	C := 1.0
+	for i := 0; i < n; i++ {
+		C = C * 2 * (2*float64(i) + float64(1)) / (float64(i) + float64(2))
+	}
+	return int(C)
+}
+
+/**
+func numTrees(n int) int {
 	if n == 0 {
 		return 1
 	}
@@ -26,3 +35,4 @@ func numTrees(n int) int {
 
 	return res
 }
+**/

@@ -1,15 +1,20 @@
 package problem0287
 
-func findDuplicate(a []int) int {
-	slow, fast := a[0], a[a[0]]
-	for slow != fast {
-		slow, fast = a[slow], a[a[fast]]
+func findDuplicate(nums []int) int {
+	a := nums[0]
+	b := nums[0]
+	for {
+		a = nums[a]
+		b = nums[nums[b]]
+		if a == b {
+			break
+		}
 	}
-
-	slow = 0
-	for slow != fast {
-		slow, fast = a[slow], a[fast]
+	x := nums[0]
+	y := a
+	for x != y {
+		x = nums[x]
+		y = nums[y]
 	}
-
-	return slow
+	return x
 }

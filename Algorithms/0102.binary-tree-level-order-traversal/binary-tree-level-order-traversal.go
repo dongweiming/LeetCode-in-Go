@@ -6,26 +6,32 @@ import (
 
 type TreeNode = kit.TreeNode
 
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
 func levelOrder(root *TreeNode) [][]int {
-	res := [][]int{}
-	var dfs func(*TreeNode, int)
-
-	dfs = func(root *TreeNode, level int) {
-		if root == nil {
-			return
-		}
-
-		// 出现了新的 level
-		if  level >= len(res)   {
-			res = append(res, []int{})
-		}
-		res[level] = append(res[level], root.Val)
-
-		dfs(root.Left, level+1)
-		dfs(root.Right, level+1)
+	if root == nil {
+		return [][]int{}
 	}
+	levels := &[][]int{}
+	helper(root, 0, levels)
+	return *levels
+}
 
-	dfs(root, 0)
-
-	return res
+func helper(node *TreeNode, level int, levels *[][]int) {
+	if len(*levels) == level {
+		*levels = append(*levels, []int{})
+	}
+	(*levels)[level] = append((*levels)[level], node.Val)
+	if node.Left != nil {
+		helper(node.Left, level+1, levels)
+	}
+	if node.Right != nil {
+		helper(node.Right, level+1, levels)
+	}
 }

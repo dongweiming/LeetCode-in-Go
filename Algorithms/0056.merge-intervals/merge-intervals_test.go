@@ -92,6 +92,18 @@ func Test_Problem0056(t *testing.T) {
 			},
 		},
 
+		question{
+			para{[]Interval{
+				Interval{1, 4},
+				Interval{0, 4},
+			},
+			},
+			ans{[]Interval{
+				Interval{0, 4},
+			},
+			},
+		},
+
 		// 如需多个测试，可以复制上方元素。
 	}
 

@@ -7,18 +7,32 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+type Stack struct {
+	color int
+	node  *TreeNode
+}
+
 func inorderTraversal(root *TreeNode) []int {
-	if root == nil {
-		return nil
+	WHITE, GRAY := 0, 1
+	res := &[]int{}
+	stack := &[]Stack{
+		Stack{WHITE, root},
 	}
 
-	if root.Left == nil && root.Right == nil {
-		return []int{root.Val}
+	for len(*stack) > 0 {
+		n := len(*stack) - 1
+		s := (*stack)[n]
+		*stack = (*stack)[:n]
+		if s.node == nil {
+			continue
+		}
+		if s.color == WHITE {
+			*stack = append(*stack, Stack{WHITE, s.node.Right})
+			*stack = append(*stack, Stack{GRAY, s.node})
+			*stack = append(*stack, Stack{WHITE, s.node.Left})
+		} else {
+			*res = append(*res, s.node.Val)
+		}
 	}
-
-	res := inorderTraversal(root.Left)
-	res = append(res, root.Val)
-	res = append(res, inorderTraversal(root.Right)...)
-
-	return res
+	return *res
 }

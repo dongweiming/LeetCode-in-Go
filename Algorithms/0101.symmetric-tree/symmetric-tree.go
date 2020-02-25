@@ -6,22 +6,33 @@ import (
 
 type TreeNode = kit.TreeNode
 
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
 func isSymmetric(root *TreeNode) bool {
-	if root == nil {
-		return true 
+	stack := &[]*TreeNode{}
+	*stack = append(*stack, root, root)
+	for len(*stack) > 0 {
+		n := len(*stack) - 1
+		t1 := (*stack)[n-1]
+		t2 := (*stack)[n]
+		(*stack) = (*stack)[:n-1]
+		if t1 == nil && t2 == nil {
+			continue
+		}
+		if t1 == nil || t2 == nil {
+			return false
+		}
+		if t1.Val != t2.Val {
+			return false
+		}
+		*stack = append(*stack, t1.Left, t2.Right)
+		*stack = append(*stack, t1.Right, t2.Left)
 	}
-
-	return recur(root.Left, root.Right)
-}
-
-func recur(left, right *TreeNode) bool {
-	if left == nil && right == nil {
-		return true
-	}
-
-	if left == nil || right == nil {
-		return false
-	}
-
-	return left.Val == right.Val && recur(left.Left, right.Right) && recur(left.Right, right.Left)
+	return true
 }

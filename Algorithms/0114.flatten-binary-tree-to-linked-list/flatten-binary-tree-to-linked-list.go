@@ -7,31 +7,23 @@ import (
 type TreeNode = kit.TreeNode
 
 func flatten(root *TreeNode) {
-	recur(root)
-}
-
-// recur 会 flatten root，并返回 flatten 后的 leaf 节点
-func recur(root *TreeNode) *TreeNode {
-	if root == nil ||
-		(root.Left == nil && root.Right == nil) {
-		return root
+	stack := &[]*TreeNode{}
+	*stack = append(*stack, root)
+	var pre *TreeNode = nil
+	for len(*stack) != 0 {
+		n := len(*stack) - 1
+		temp := (*stack)[n]
+		*stack = (*stack)[:n]
+		if pre != nil {
+			pre.Right = temp
+			pre.Left = nil
+		}
+		if temp.Right != nil {
+			*stack = append(*stack, temp.Right)
+		}
+		if temp.Left != nil {
+			*stack = append(*stack, temp.Left)
+		}
+		pre = temp
 	}
-
-	if root.Left == nil {
-		return recur(root.Right)
-	}
-
-	if root.Right == nil {
-		root.Right = root.Left
-		root.Left = nil
-		return recur(root.Right)
-	}
-
-	res := recur(root.Right)
-	recur(root.Left).Right = root.Right
-	root.Right = root.Left
-	// 不要忘记封闭 left 节点
-	root.Left = nil
-
-	return res
 }

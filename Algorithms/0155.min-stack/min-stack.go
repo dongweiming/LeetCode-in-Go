@@ -1,38 +1,37 @@
 package problem0155
 
-// MinStack 是可以返回最小值的栈
 type MinStack struct {
-	stack []item
-}
-type item struct {
-	min, x int
+	items  []int
+	helper []int
 }
 
-// Constructor 构造 MinStack
+/** initialize your data structure here. */
 func Constructor() MinStack {
 	return MinStack{}
 }
 
-// Push 存入数据
 func (this *MinStack) Push(x int) {
-	min := x
-	if len(this.stack) > 0 && this.GetMin() < x {
-		min = this.GetMin()
+	this.items = append(this.items, x)
+	if len(this.helper) == 0 || x <= this.helper[len(this.helper)-1] {
+		this.helper = append(this.helper, x)
 	}
-	this.stack = append(this.stack, item{min: min, x: x})
 }
 
-// Pop 抛弃最后一个入栈的值
 func (this *MinStack) Pop() {
-	this.stack = this.stack[:len(this.stack)-1]
+	n := len(this.items) - 1
+	if this.helper[len(this.helper)-1] == this.items[n] {
+		this.helper = this.helper[:len(this.helper)-1]
+	}
+	this.items = this.items[:n]
 }
 
-// Top 返回最大值
 func (this *MinStack) Top() int {
-	return this.stack[len(this.stack)-1].x
+	return this.items[len(this.items)-1]
 }
 
-// GetMin 返回最小值
 func (this *MinStack) GetMin() int {
-	return this.stack[len(this.stack)-1].min
+	if len(this.helper) > 0 {
+		return this.helper[len(this.helper)-1]
+	}
+	return 0
 }

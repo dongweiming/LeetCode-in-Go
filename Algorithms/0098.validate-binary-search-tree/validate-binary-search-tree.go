@@ -7,19 +7,20 @@ import (
 type TreeNode = kit.TreeNode
 
 func isValidBST(root *TreeNode) bool {
-	// Go int 类型的最小值与最大值
-	MIN, MAX := -1<<63, 1<<63-1
-
-	return recur(MIN, MAX, root)
-}
-
-// 以递归的方式，检查 root.Val 是否在 (min, max) 范围内。
-func recur(min, max int, root *TreeNode) bool {
-	if root == nil {
-		return true
+	stack, cur := &[]*TreeNode{}, -1<<63
+	for len(*stack) != 0 || root != nil {
+		for root != nil {
+			*stack = append(*stack, root)
+			root = root.Left
+		}
+		n := len(*stack) - 1
+		root = (*stack)[n]
+		(*stack) = (*stack)[:n]
+		if root.Val <= cur {
+			return false
+		}
+		cur = root.Val
+		root = root.Right
 	}
-
-	return min < root.Val && root.Val < max &&
-		recur(min, root.Val, root.Left) &&
-		recur(root.Val, max, root.Right)
+	return true
 }

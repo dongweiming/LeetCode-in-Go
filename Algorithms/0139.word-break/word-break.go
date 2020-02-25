@@ -1,42 +1,21 @@
 package problem0139
 
-import "sort"
-
 func wordBreak(s string, wordDict []string) bool {
-	if len(wordDict) == 0 {
-		return false
-	}
-
-	dict := make(map[string]bool, len(wordDict))
-	length := make(map[int]bool, len(wordDict))
-
+	init := make(map[int]bool)
+	m := make(map[string]bool)
 	for _, w := range wordDict {
-		length[len(w)] = true
-		dict[w] = true
+		m[w] = true
 	}
+	init[0] = true
 
-	sizes := make([]int, 0, len(length))
-	for k := range length {
-		sizes = append(sizes, k)
-	}
-
-	sort.Ints(sizes)
-
-	// dp[i] == true，等于 wordBreak(s[:i+1], wordDict) == true
-	dp := make([]bool, len(s)+1)
-	dp[0] = true
-	n := len(s)
-	for i := 0; i <= n; i++ {
-		if !dp[i] {
-			continue
-		}
-
-		for _, size := range sizes {
-			if i+size <= n {
-				dp[i+size] = dp[i+size] || dict[s[i:i+size]]
+	for i := 1; i <= len(s); i++ {
+		for j := 0; j < i; j++ {
+			o, _ := init[j]
+			if ok, _ := m[s[j:i]]; ok && o {
+				init[i] = true
+				break
 			}
 		}
 	}
-
-	return dp[n]
+	return init[len(s)]
 }

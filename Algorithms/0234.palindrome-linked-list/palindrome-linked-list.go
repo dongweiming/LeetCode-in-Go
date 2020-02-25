@@ -6,22 +6,41 @@ import (
 
 type ListNode = kit.ListNode
 
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
 func isPalindrome(head *ListNode) bool {
-	// 获取 list 中的值
-	nums := make([]int, 0, 64)
-	for head != nil {
-		nums = append(nums, head.Val)
-		head = head.Next
+	fast, slow := head, head
+	for fast != nil && fast.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
 	}
-
-	// 按照规则对比值
-	l, r := 0, len(nums)-1
-	for l < r {
-		if nums[l] != nums[r] {
+	if fast != nil {
+		slow = slow.Next
+	}
+	slow = reverse(slow)
+	fast = head
+	for slow != nil {
+		if slow.Val != fast.Val {
 			return false
 		}
-		l++
-		r--
+		slow = slow.Next
+		fast = fast.Next
 	}
 	return true
+}
+
+func reverse(head *ListNode) *ListNode {
+	var prev *ListNode
+	for head != nil {
+		next := head.Next
+		head.Next = prev
+		prev = head
+		head = next
+	}
+	return prev
 }

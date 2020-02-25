@@ -4,37 +4,28 @@ import (
 	"sort"
 )
 
-// Interval Definition for an interval.
 type Interval struct {
 	Start int
 	End   int
 }
 
-func merge(its []Interval) []Interval {
-	if len(its) <= 1 {
-		return its
-	}
-
-	sort.Slice(its, func(i int, j int) bool {
-		return its[i].Start < its[j].Start
+func merge(intervals []Interval) []Interval {
+	sort.Slice(intervals, func(i int, j int) bool {
+		return intervals[i].Start < intervals[j].Start
 	})
-
-	res := make([]Interval, 0, len(its))
-
-	temp := its[0]
-	for i := 1; i < len(its); i++ {
-		if its[i].Start <= temp.End {
-			temp.End = max(temp.End, its[i].End)
-		} else {
-			res = append(res, temp)
-			temp = its[i]
+	merged := &[]Interval{}
+	for _, i := range intervals {
+		size := len(*merged)
+		if len(*merged) == 0 || (*merged)[size-1].End < i.Start {
+			*merged = append(*merged, i)
+		} else if (*merged)[size-1].End < i.End {
+			(*merged)[size-1].End = i.End
 		}
 	}
-	res = append(res, temp)
-
-	return res
+	return *merged
 }
 
+// For test
 func max(a, b int) int {
 	if a > b {
 		return a

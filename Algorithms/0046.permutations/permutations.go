@@ -1,44 +1,37 @@
-package problem0046
+//package problem0046
+package main
+
+import "fmt"
 
 func permute(nums []int) [][]int {
-	n := len(nums)
-	// vector 是一组可能的解答
-	vector := make([]int, n)
-	// taken[i] == true 表示 nums[i] 已经出现在了 vector 中
-	taken := make([]bool, n)
-
-	var ans [][]int
-
-	makePermutation(0, n, nums, vector, taken, &ans)
-
-	return ans
+	res := [][]int{}
+	index := 0
+	path := []int{}
+	used := make([]bool, len(nums))
+	backtrack(nums, index, path, &res, &used)
+	return res
 }
 
-// 这个方式和我原来的方式相比，
-// 增加了比较的次数
-// 但是，减少了切片生成的次数。
-// 所以，速度会快一些。
-func makePermutation(cur, n int, nums, vector []int, taken []bool, ans *[][]int) {
-	if cur == n {
-		tmp := make([]int, n)
-		copy(tmp, vector)
-		*ans = append(*ans, tmp)
+func backtrack(nums []int, first int, path []int, res *[][]int, used *[]bool) {
+	n := len(nums)
+	if first == n {
+		tmp := make([]int, len(path))
+		copy(tmp, path)
+		*res = append(*res, tmp)
 		return
 	}
-
 	for i := 0; i < n; i++ {
-		if !taken[i] {
-			// 准备使用 nums[i]，所以，taken[i] == true
-			taken[i] = true
-			// NOTICE: 是 vector[cur]
-			vector[cur] = nums[i]
-
-			makePermutation(cur+1, n, nums, vector, taken, ans)
-
-			// 下一个循环中
-			// vector[cur] = nums[i+1]
-			// 所以，在这个循环中，恢复 nums[i] 自由
-			taken[i] = false
+		if !(*used)[i] {
+			(*used)[i] = true
+			path = append(path, nums[i])
+			backtrack(nums, first+1, path, res, used)
+			path = path[:len(path)-1]
+			(*used)[i] = false
 		}
 	}
+	return
+}
+
+func main() {
+	fmt.Println(permute([]int{1, 2, 3}))
 }

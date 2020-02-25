@@ -1,15 +1,20 @@
 package problem0048
 
-func rotate(m [][]int) {
-	n := len(m)
-	for i := 0; i < n/2; i++ {
-		for j := i; j < n-i-1; j++ {
-			temp := m[i][j]
-			// 左边的行 等于 右边的列
-			m[i][j] = m[n-j-1][i]
-			m[n-j-1][i] = m[n-i-1][n-j-1]
-			m[n-i-1][n-j-1] = m[j][n-i-1]
-			m[j][n-i-1] = temp
+func rotate(matrix [][]int) {
+	row := len(matrix)
+	col := len(matrix[0])
+	for i := 0; i < row; i++ {
+		for j := i + 1; j < col; j++ {
+			tmp := matrix[i][j]
+			matrix[i][j] = matrix[j][i]
+			matrix[j][i] = tmp
+		}
+	}
+	for i := 0; i < row; i++ {
+		for j := 0; j < col/2; j++ {
+			tmp := matrix[i][j]
+			matrix[i][j] = matrix[i][col-j-1]
+			matrix[i][col-j-1] = tmp
 		}
 	}
 }

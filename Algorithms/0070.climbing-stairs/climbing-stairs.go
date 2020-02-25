@@ -1,16 +1,15 @@
 package problem0070
 
 func climbStairs(n int) int {
-	if n < 2 {
+	if n <= 1 {
 		return 1
 	}
-
-	rec := make([]int, n+1)
-	rec[0], rec[1] = 1, 1
-
-	for i := 2; i <= n; i++ {
-		rec[i] = rec[i-1] + rec[i-2]
+	first := 1
+	second := 2
+	for i := 3; i <= n; i++ {
+		third := first + second
+		first = second
+		second = third
 	}
-
-	return rec[n]
+	return second
 }

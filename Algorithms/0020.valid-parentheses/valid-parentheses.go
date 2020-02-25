@@ -2,7 +2,6 @@ package problem0020
 
 func isValid(s string) bool {
 	size := len(s)
-
 	stack := make([]byte, size)
 	top := 0
 

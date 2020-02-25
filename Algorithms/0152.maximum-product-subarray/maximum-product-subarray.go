@@ -1,27 +1,24 @@
 package problem0152
 
-func maxProduct(a []int) int {
-	cur, neg, max := 1, 1, a[0]
-
-	for i := 0; i < len(a); i++ {
-
-		switch {
-		case a[i] > 0:
-			cur, neg = a[i]*cur, a[i]*neg
-		case a[i] < 0:
-			cur, neg = a[i]*neg, a[i]*cur
-		default:
-			cur, neg = 0, 1
+func maxProduct(nums []int) int {
+	max, imin, imax := -1<<32, 1, 1
+	for _, i := range nums {
+		if i < 0 {
+			imin, imax = imax, imin
 		}
-
-		if max < cur {
-			max = cur
+		if imax*i > i {
+			imax = imax * i
+		} else {
+			imax = i
 		}
-
-		if cur <= 0 {
-			cur = 1
+		if imin*i < i {
+			imin = imin * i
+		} else {
+			imin = i
+		}
+		if imax > max {
+			max = imax
 		}
 	}
-
 	return max
 }

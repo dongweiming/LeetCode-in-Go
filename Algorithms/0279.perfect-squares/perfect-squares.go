@@ -5,26 +5,24 @@ import (
 )
 
 func numSquares(n int) int {
-	perfects := []int{}
-	for i := 1; i*i <= n; i++ {
-		perfects = append(perfects, i*i)
+	if isSquare(n) {
+		return 1
 	}
-
-	// dp[i] 表示 the least number of perfect square numbers which sum to i
-	dp := make([]int, n+1)
-	for i := 1; i < len(dp); i++ {
-		dp[i] = math.MaxInt32
+	for n%4 == 0 {
+		n >>= 2
 	}
-
-	for _, p := range perfects {
-		for i := p; i < len(dp); i++ {
-			if dp[i] > dp[i-p]+1 {
-				// 因为 i = ( i - p ) + p，p 是 平方数
-				// 所以 dp[i] = dp[i-p] + 1
-				dp[i] = dp[i-p] + 1
-			}
+	if n%8 == 7 {
+		return 4
+	}
+	for i := 1; i <= int(math.Sqrt(float64(n))); i++ {
+		if isSquare(n - i*i) {
+			return 2
 		}
 	}
+	return 3
+}
 
-	return dp[n]
+func isSquare(n int) bool {
+	s := math.Sqrt(float64(n))
+	return s == float64(int(s))
 }
