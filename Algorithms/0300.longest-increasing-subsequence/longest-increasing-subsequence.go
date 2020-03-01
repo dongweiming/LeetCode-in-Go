@@ -4,7 +4,6 @@ import "sort"
 
 func lengthOfLIS(nums []int) int {
 	tails := make([]int, 0, len(nums))
-
 	for _, n := range nums {
 		at := sort.SearchInts(tails, n)
 		if at == len(tails) {

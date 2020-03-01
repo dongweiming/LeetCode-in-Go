@@ -7,26 +7,22 @@ import (
 type TreeNode = kit.TreeNode
 
 func diameterOfBinaryTree(root *TreeNode) int {
-	_, res := helper(root)
-	return res
-}
-
-func helper(root *TreeNode) (length, diameter int) {
-	if root == nil {
-		return
+	ans := 1
+	var depth func(node *TreeNode) int
+	depth = func(node *TreeNode) int {
+		if node == nil {
+			return 0
+		}
+		left := depth(node.Left)
+		right := depth(node.Right)
+		if left+right+1 > ans {
+			ans = left + right + 1
+		}
+		if left > right {
+			return left + 1
+		}
+		return right + 1
 	}
-
-	leftLen, leftDia := helper(root.Left)
-	rightLen, rightDia := helper(root.Right)
-
-	length = max(leftLen, rightLen) + 1
-	diameter = max(leftLen+rightLen, max(leftDia, rightDia))
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
+	depth(root)
+	return ans - 1
 }

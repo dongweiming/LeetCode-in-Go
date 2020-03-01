@@ -5,7 +5,6 @@ func maxProfit(prices []int) int {
 	if n == 0 {
 		return 0
 	}
-
 	// prices[i] 表示 第 i 天的价格
 	buy := make([]int, n+1)
 	buy[1] = 0 - prices[0]

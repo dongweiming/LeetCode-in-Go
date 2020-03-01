@@ -1,13 +1,10 @@
 package problem0461
 
 func hammingDistance(x int, y int) int {
-	x ^= y
-
-	res := 0
-	for x > 0 {
-		res += x & 1
-		x >>= 1
+	cnt, xor := 0, x^y
+	for xor != 0 {
+		cnt++
+		xor = xor & (xor - 1)
 	}
-
-	return res
+	return cnt
 }

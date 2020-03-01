@@ -1,6 +1,7 @@
 package problem0581
 
 func findUnsortedSubarray(nums []int) int {
+
 	n := len(nums)
 	left, right := 0, -1 // left和right的取值，只要满足 right - left + 1 == 0 即可
 	min, max := nums[n-1], nums[0]

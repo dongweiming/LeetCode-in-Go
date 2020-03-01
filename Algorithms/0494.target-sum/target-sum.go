@@ -14,7 +14,6 @@ func findTargetSumWays(nums []int, S int) int {
 	if (sum+S)%2 == 1 {
 		return 0
 	}
-
 	return calcSumWays(nums, (sum+S)/2)
 }
 

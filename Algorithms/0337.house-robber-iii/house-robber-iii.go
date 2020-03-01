@@ -7,22 +7,19 @@ import (
 type TreeNode = kit.TreeNode
 
 func rob(root *TreeNode) int {
-	var dfs func(*TreeNode) (int, int)
-	// a 抢劫 root 节点时的最大值
-	// b 不抢劫 root 节点时的最大值
-	dfs = func(root *TreeNode) (a, b int) {
-		if root == nil {
-			return 0, 0
-		}
-		la, lb := dfs(root.Left)
-		ra, rb := dfs(root.Right)
-		a = root.Val + lb + rb
-		b = max(la, lb) + max(ra, rb)
-		return a, b
-	}
+	res := rob_(root)
+	return max(res[0], res[1])
+}
 
-	a, b := dfs(root)
-	return max(a, b)
+func rob_(root *TreeNode) []int {
+	res := make([]int, 2)
+	if root == nil {
+		return res
+	}
+	left, right := rob_(root.Left), rob_(root.Right)
+	res[0] = max(left[0], left[1]) + max(right[0], right[1])
+	res[1] = left[0] + right[0] + root.Val
+	return res
 }
 
 func max(a, b int) int {

@@ -7,30 +7,18 @@ import (
 type TreeNode = kit.TreeNode
 
 func pathSum(root *TreeNode, sum int) int {
-	if root == nil {
+	return helper(root, 0, sum, map[int]int{0: 1})
+}
+
+func helper(node *TreeNode, curSum, sum int, m map[int]int) int {
+	if node == nil {
 		return 0
 	}
-
-	cnt := 0
-
-	var dfs func(*TreeNode, int)
-	dfs = func(node *TreeNode, sum int) {
-		if node == nil {
-			return
-		}
-
-		sum -= node.Val
-		if sum == 0 {
-			cnt++
-		}
-
-		dfs(node.Left, sum)
-		dfs(node.Right, sum)
-	}
-
-	dfs(root, sum)
-
-	return cnt +
-		pathSum(root.Left, sum) +
-		pathSum(root.Right, sum)
+	curSum += node.Val
+	summary := m[curSum-sum]
+	m[curSum]++
+	summary += helper(node.Left, curSum, sum, m)
+	summary += helper(node.Right, curSum, sum, m)
+	m[curSum]--
+	return summary
 }

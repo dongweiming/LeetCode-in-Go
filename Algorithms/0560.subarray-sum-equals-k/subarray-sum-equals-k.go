@@ -1,6 +1,7 @@
 package problem0560
 
 func subarraySum(a []int, k int) int {
+
 	res, sum := 0, 0
 	rec := make(map[int]int, len(a))
 	rec[0] = 1

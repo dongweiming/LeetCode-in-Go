@@ -1,29 +1,27 @@
 package problem0347
 
-import "sort"
-
 func topKFrequent(nums []int, k int) []int {
-	res := make([]int, 0, k)
-	// 统计每个数字出现的次数
-	rec := make(map[int]int, len(nums))
+	res := &[]int{}
+	m := make(map[int]int, len(nums))
+	tmp := make([]int, len(nums)+1)
 	for _, n := range nums {
-		rec[n]++
+		m[n]++
 	}
-	// 对出现次数进行排序
-	counts := make([]int, 0, len(rec))
-	for _, c := range rec {
-		counts = append(counts, c)
+	rm := map[int][]int{}
+	for k, v := range m {
+		rm[v] = append(rm[v], k)
+		tmp[v] = 1
 	}
-	sort.Ints(counts)
-	// min 是 前 k 个高频数字的底线
-	min := counts[len(counts)-k]
-
-	// 收集所有　不低于　底线的数字
-	for n, c := range rec {
-		if c >= min {
-			res = append(res, n)
+	for i := len(tmp) - 1; i >= 0; i-- {
+		if tmp[i] != 0 {
+			for _, vv := range rm[i] {
+				if k == 0 {
+					return *res
+				}
+				*res = append(*res, vv)
+				k--
+			}
 		}
 	}
-
-	return res
+	return *res
 }

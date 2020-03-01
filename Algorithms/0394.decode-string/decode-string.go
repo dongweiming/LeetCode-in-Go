@@ -6,7 +6,6 @@ import (
 
 func decodeString(s string) string {
 	n := len(s)
-
 	// i 是第一个数字的位置
 	i := 0
 	for i < n && (s[i] < '0' || '9' < s[i]) {
